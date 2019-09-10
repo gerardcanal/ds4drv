@@ -81,17 +81,18 @@ class HidrawDS4Device(DS4Device):
         
         crc = zlib.crc32(bytes(buf[:(len(buf)-4)])) & 0xffffffff
 
-        buf[len(buf)-4] = chr(crc & 0xFF)
-        buf[len(buf)-3] = chr((crc & 0xFF00) >> 8)
-        buf[len(buf)-2] = chr((crc & 0xFF0000)>>16)
-        buf[len(buf)-1] = chr((crc & 0xFF000000)>>24)
+        buf[len(buf)-4] = (crc & 0xFF)
+        buf[len(buf)-3] = ((crc & 0xFF00) >> 8)
+        buf[len(buf)-2] = ((crc & 0xFF0000)>>16)
+        buf[len(buf)-1] = ((crc & 0xFF000000)>>24)
         
         self.fd.write(buf[1:])
 
     def close(self):
         try:
             # Reset LED to original hidraw pairing colour.
-            self.set_led(0, 0, 1)
+            self.set_led(255, 69, 0)  # Orange
+            self.start_led_flash(90, 50)
 
             self.fd.close()
             self.input_device.ungrab()

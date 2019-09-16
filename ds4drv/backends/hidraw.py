@@ -91,6 +91,9 @@ class HidrawDS4Device(DS4Device):
     def close(self):
         try:
             # Reset LED to original hidraw pairing colour.
+            # self.set_led(0, 0, 1)
+
+            # Set LED to blinking orange to notify the driver disconnection. (0, 0, 1) is almost off so not that useful.
             self.set_led(255, 69, 0)  # Orange
             self.start_led_flash(90, 50)
 
